@@ -1,0 +1,206 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | MyStore</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F4F7FA;
+            color: #16324F;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            background: #16324F;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #20A39E;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #16324F, #177E7A);
+            color: white;
+            text-align: center;
+            padding: 35px 15px;
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .hero p {
+            margin-bottom: 0;
+            color: #D9F3F1;
+        }
+
+        .login-container {
+            width: min(420px, 90%);
+            margin: 35px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(22, 50, 79, 0.10);
+        }
+
+        .login-container h2 {
+            text-align: center;
+            color: #16324F;
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #CBD5E1;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: 2px solid #20A39E;
+            border-color: #20A39E;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 13px;
+            background: #20A39E;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #177E7A;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-bottom: 0;
+            color: #64748B;
+        }
+
+        .register-link a {
+            color: #177E7A;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .error {
+            background: #FEE2E2;
+            color: #B91C1C;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        footer {
+            margin-top: auto;
+            background: #16324F;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 16px;
+            }
+
+            .hero h1 {
+                font-size: 25px;
+            }
+
+            .login-container {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h2>MyStore</h2>
+    <a href="/">← Back to Home</a>
+</nav>
+
+<section class="hero">
+    <h1>Welcome Back!</h1>
+    <p>Login to continue shopping with MyStore.</p>
+</section>
+
+<div class="login-container">
+    <h2>Login to Your Account</h2>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username"
+               placeholder="Enter your username" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password"
+               placeholder="Enter your password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="register-link">
+        Don't have an account?
+        <a href="{% url 'register' %}">Sign Up</a>
+    </p>
+</div>
+
+<footer>
+    <p>© 2026 MyStore | Happy Shopping!</p>
+</footer>
+
+</body>
+</html>

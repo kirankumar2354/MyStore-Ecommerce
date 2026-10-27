@@ -1,0 +1,247 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} | MyStore</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F4F7FA;
+            color: #16324F;
+        }
+
+        nav {
+            background: #16324F;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        nav h2 {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 18px;
+        }
+
+        nav a:hover {
+            color: #20A39E;
+        }
+
+        .breadcrumb {
+            margin: 25px auto 0;
+            max-width: 1100px;
+            padding: 0 20px;
+            color: #64748B;
+        }
+
+        .product-container {
+            max-width: 1100px;
+            margin: 25px auto 50px;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(22, 50, 79, 0.08);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .image-box {
+            background: #F4F7FA;
+            border-radius: 12px;
+            min-height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .image-box img {
+            width: 100%;
+            max-height: 380px;
+            object-fit: contain;
+        }
+
+        .category {
+            display: inline-block;
+            background: #DDF5F2;
+            color: #177E7A;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .product-info h1 {
+            font-size: 34px;
+            margin: 18px 0 12px;
+        }
+
+        .price {
+            font-size: 30px;
+            font-weight: bold;
+            color: #177E7A;
+            margin: 15px 0;
+        }
+
+        .description {
+            color: #64748B;
+            line-height: 1.8;
+        }
+
+        .stock {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .add-btn {
+            display: inline-block;
+            background: #20A39E;
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .add-btn:hover {
+            background: #177E7A;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #177E7A;
+            text-decoration: none;
+        }
+
+        footer {
+            background: #16324F;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .product-container {
+                grid-template-columns: 1fr;
+                margin: 20px 12px 35px;
+                padding: 20px;
+                gap: 25px;
+            }
+
+            .image-box {
+                min-height: 230px;
+            }
+
+            .product-info h1 {
+                font-size: 28px;
+            }
+
+            nav {
+                padding: 16px;
+            }
+
+            nav a {
+                margin-left: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <h2>MyStore</h2>
+    <div>
+        <a href="/">Home</a>
+        <a href="{% url 'cart_list' %}">My Cart</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'my_orders' %}">My Orders</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+</nav>
+
+<p class="breadcrumb">
+    <a href="/">Home</a> / {{ product.name }}
+</p>
+
+<section class="product-container">
+
+    <div class="image-box">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+            <p>Image not available</p>
+        {% endif %}
+    </div>
+
+    <div class="product-info">
+        <span class="category">{{ product.category }}</span>
+
+        <h1>{{ product.name }}</h1>
+
+        <p class="price">₹{{ product.price }}</p>
+
+        <p class="description">
+            {{ product.description|default:"Discover this product at MyStore. Add it to your collection today!" }}
+        </p>
+
+        {% if product.stock > 0 %}
+            <p class="stock" style="color: #177E7A;">
+                ✓ In Stock — {{ product.stock }} available
+            </p>
+
+            {% if user.is_authenticated %}
+                <form action="{% url 'add_to_cart' product.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="add-btn" type="submit">
+                        Add to Cart
+                    </button>
+                </form>
+            {% else %}
+                <a class="add-btn" href="{% url 'login' %}">
+                    Login to Add to Cart
+                </a>
+            {% endif %}
+
+        {% else %}
+            <p class="stock" style="color: #DC2626;">Currently Out of Stock</p>
+        {% endif %}
+
+        <br>
+        <a class="back-link" href="/">← Continue Shopping</a>
+    </div>
+
+</section>
+
+<footer>
+    <p>© 2026 MyStore | Happy Shopping!</p>
+</footer>
+
+</body>
+</html>

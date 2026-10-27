@@ -1,0 +1,241 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | MyStore</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F4F7FA;
+            color: #16324F;
+        }
+
+        nav {
+            background: #16324F;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        nav h2 {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #20A39E;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #16324F, #177E7A);
+            color: white;
+            text-align: center;
+            padding: 32px 15px;
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+        }
+
+        .hero p {
+            margin-bottom: 0;
+            color: #D9F3F1;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 92%;
+            margin: 30px auto;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(22, 50, 79, 0.08);
+        }
+
+        h2 {
+            color: #16324F;
+            margin-top: 0;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .summary-item strong {
+            white-space: nowrap;
+            color: #177E7A;
+        }
+
+        .total {
+            color: #177E7A;
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 15px 0 7px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #CBD5E1;
+            border-radius: 7px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus, textarea:focus {
+            outline: 2px solid #20A39E;
+            border-color: #20A39E;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 13px;
+            background: #20A39E;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #177E7A;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 18px;
+            color: #177E7A;
+            text-decoration: none;
+        }
+
+        footer {
+            background: #16324F;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            nav {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h2>MyStore</h2>
+    <a href="{% url 'cart_list' %}">← Back to Cart</a>
+</nav>
+
+<section class="hero">
+    <h1>Secure Checkout</h1>
+    <p>Almost there! Confirm your details to place your order.</p>
+</section>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Order Summary</h2>
+
+        {% for item in items %}
+            <div class="summary-item">
+                <span>{{ item.product.name }} × {{ item.quantity }}</span>
+                <strong>₹{% widthratio item.product.price 1 item.quantity %}</strong>
+            </div>
+        {% empty %}
+            <p>Your cart is empty.</p>
+        {% endfor %}
+
+        <p class="total">Total: ₹{{ total }}</p>
+        <a class="back-link" href="{% url 'cart_list' %}">← Edit Cart</a>
+    </div>
+
+    <div class="card">
+        <h2>Delivery Details</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name"
+                   placeholder="Enter your full name" required>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone"
+                   placeholder="Enter your phone number"
+                   pattern="[0-9+\-\s]{10,15}" required>
+
+            <label for="address">Delivery Address</label>
+            <textarea id="address" name="address"
+                      placeholder="House number, street, city, PIN code"
+                      required></textarea>
+
+            <button type="submit">Place Order →</button>
+        </form>
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 MyStore | Happy Shopping!</p>
+</footer>
+
+</body>
+</html>

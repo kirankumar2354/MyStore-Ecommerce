@@ -1,0 +1,215 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | MyStore</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F4F7FA;
+            color: #16324F;
+        }
+
+        nav {
+            background: #16324F;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        nav h2 {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #20A39E;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #16324F, #177E7A);
+            color: white;
+            padding: 32px 15px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+        }
+
+        .hero p {
+            margin-bottom: 0;
+            color: #D9F3F1;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 92%;
+            margin: 30px auto;
+        }
+
+        .order-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(22, 50, 79, 0.08);
+            border-left: 5px solid #20A39E;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .order-header h2 {
+            color: #16324F;
+            margin: 0;
+        }
+
+        .status {
+            background: #DDF5F2;
+            color: #177E7A;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .order-info {
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .order-total {
+            color: #177E7A;
+            font-size: 21px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .empty {
+            background: white;
+            text-align: center;
+            padding: 45px 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(22, 50, 79, 0.08);
+        }
+
+        .empty h2 {
+            color: #16324F;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 18px;
+            background: #20A39E;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #177E7A;
+        }
+
+        footer {
+            background: #16324F;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 16px;
+            }
+
+            .order-card {
+                padding: 18px;
+            }
+
+            .order-header {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h2>MyStore</h2>
+    <a href="/">← Continue Shopping</a>
+</nav>
+
+<section class="hero">
+    <h1>My Orders</h1>
+    <p>View your orders and delivery details.</p>
+</section>
+
+<div class="container">
+
+    {% for order in orders %}
+        <div class="order-card">
+
+            <div class="order-header">
+                <h2>Order #{{ order.id }}</h2>
+                <span class="status">Order Placed</span>
+            </div>
+
+            <div class="order-info">
+                <p><strong>Name:</strong> {{ order.full_name }}</p>
+                <p><strong>Phone:</strong> {{ order.phone }}</p>
+                <p><strong>Delivery Address:</strong> {{ order.address }}</p>
+                <p><strong>Order Date:</strong> {{ order.created_at|date:"d M Y, h:i A" }}</p>
+            </div>
+
+            <p class="order-total">Total: ₹{{ order.total }}</p>
+
+        </div>
+    {% empty %}
+        <div class="empty">
+            <h2>No Orders Yet</h2>
+            <p>Your orders will appear here after checkout.</p>
+            <a class="btn" href="/">Start Shopping</a>
+        </div>
+    {% endfor %}
+
+</div>
+
+<footer>
+    <p>© 2026 MyStore | Happy Shopping!</p>
+</footer>
+
+</body>
+</html>
